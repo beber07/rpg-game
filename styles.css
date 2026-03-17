@@ -1,612 +1,345 @@
-/* ==================== RESET & VARIABLES ==================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&display=swap');
 
+/* ── CSS Variables ── */
 :root {
-  --primary-color: #feac32;
-  --primary-light: #ffcc4c;
-  --secondary-color: #0a0a23;
-  --secondary-dark: #1a1a3e;
-  --danger-color: #ff4444;
-  --danger-dark: #cc0000;
-  --success-color: #44ff44;
-  --text-light: #ffffff;
-  --text-dark: #0a0a23;
-  --border-radius: 12px;
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
-  --transition: all 0.5s ease;
+  --parchment:        #f5e9c8;
+  --parchment-dark:   #e8d5a3;
+  --parchment-deeper: #d4b97a;
+  --ink:              #1a0f00;
+  --ink-faded:        #3d2b0e;
+  --gold:             #c9931a;
+  --gold-light:       #f0c040;
+  --gold-shine:       #ffe082;
+  --crimson:          #8b0000;
+  --crimson-light:    #c0392b;
+  --forest:           #1a3a1a;
+  --forest-mid:       #2d5a27;
+  --stone:            #4a4035;
+  --stone-light:      #7a6e5e;
+  --shadow:           rgba(10, 5, 0, 0.6);
 }
 
-/* ==================== BODY & BACKGROUND ==================== */
-html,
-body {
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
   display: flex;
+  align-items: flex-start;
   justify-content: center;
-  align-items: center;
-  position: relative;
-  color: var(--text-dark);
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  transition: background 0.6s ease;
+  padding: 40px 16px 60px;
+  background-color: #0d0a05;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 0%, #2a1a05 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  font-family: 'IM Fell English', Georgia, serif;
+  color: var(--ink);
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M4 0 L8 16 L11 11 L16 16 L18 14 L13 9 L19 6 Z' fill='%23c9931a' stroke='%231a0f00' stroke-width='1'/%3E%3C/svg%3E") 4 0, auto;
 }
 
-/* Town Square - Medieval Fantasy Village Square */
-body.bg-town-square {
-  background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 50%, #90EE90 100%);
+/* ── Floating runes decoration ── */
+body::before {
+  content: '᛭  ᚦ  ᚢ  ᚾ  ᛞ  ᛟ  ᚱ';
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  letter-spacing: 14px;
+  color: var(--gold);
+  opacity: 0.18;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
-/* Store - Cozy Medieval Tavern Interior */
-body.bg-store {
-  background: linear-gradient(135deg, #8B6914 0%, #CD853F 50%, #D2B48C 100%);
-}
-
-/* Cave - Dark Underground Cavern */
-body.bg-cave {
-  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-}
-
-/* Fight - Epic Dragon Battle Arena */
-body.bg-fight {
-  background: linear-gradient(135deg, #8B0000 0%, #DC143C 50%, #FF4500 100%);
-}
-
-/* Victory - Golden Sunrise Celebration */
-body.bg-victory {
-  background: linear-gradient(180deg, #FFD700 0%, #FFA500 50%, #90EE90 100%);
-}
-
-/* Lose - Dark Moody Despair */
-body.bg-lose {
-  background: linear-gradient(135deg, #2a0a4a 0%, #440055 50%, #1a0a2a 100%);
-}
-
-/* Win - Majestic Castle Throne Victory */
-body.bg-win {
-  background: linear-gradient(180deg, #001a4d 0%, #0033cc 50%, #003366 100%);
-}
-
-/* Easter Egg - Mystical Treasure Vault */
-body.bg-easter-egg {
-  background: linear-gradient(135deg, #8B6914 0%, #FFD700 50%, #FFA500 100%);
-}
-
-/* ==================== MAIN CONTAINER ==================== */
+/* ── Game Container ── */
 #game {
-  max-width: 600px;
-  width: 100%;
-  height: 100vh;
-  max-height: 100vh;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-  padding: 25px;
-  border-radius: var(--border-radius);
-  box-shadow: 
-    0 0 60px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(254, 172, 50, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  border: 3px solid var(--primary-color);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  animation: slideInGame 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
-  z-index: 100;
-  will-change: transform;
-}
-
-@keyframes slideInGame {
-  from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* ==================== HEADER WITH DRAGON ==================== */
-.header {
-  text-align: center;
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 3px solid var(--primary-color);
-  flex-shrink: 0;
-}
-
-.header h1 {
-  font-size: clamp(1.8em, 5vw, 2.5em);
-  color: var(--secondary-color);
-  margin: 0;
-  text-shadow: 2px 2px 4px rgba(254, 172, 50, 0.3);
-  line-height: 1.2;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.header-dragon {
-  font-size: clamp(2em, 8vw, 4em);
-  margin: 5px 0;
-  animation: dragon-fly 3s ease-in-out infinite;
-  display: inline-block;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-  will-change: transform;
-}
-
-@keyframes dragon-fly {
-  0%, 100% { transform: translateY(0) scale(1) rotateZ(-5deg); }
-  25% { transform: translateY(-15px) scale(1.05) rotateZ(5deg); }
-  50% { transform: translateY(-8px) scale(1) rotateZ(-5deg); }
-  75% { transform: translateY(-15px) scale(1.05) rotateZ(5deg); }
-}
-
-.header p {
-  color: #666;
-  font-size: clamp(0.85em, 2.5vw, 0.95em);
-  margin: 5px 0 0 0;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-/* ==================== STATS PANEL ==================== */
-#stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-  flex-shrink: 0;
-}
-
-.stat {
-  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
-  padding: 12px;
-  border-radius: 10px;
-  border: 2px solid var(--primary-color);
-  color: var(--text-light);
-  box-shadow: 
-    0 4px 15px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  transition: transform 0.2s ease;
-}
-
-.stat:hover {
-  transform: translateY(-2px);
-}
-
-.stat strong {
-  color: var(--primary-light);
-  font-size: 1.15em;
-  line-height: 1.2;
-  font-weight: 700;
-}
-
-/* ==================== TEXT AREA ==================== */
-#text {
-  background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
-  color: var(--text-dark);
-  padding: 16px;
-  border-radius: 10px;
-  border-left: 5px solid var(--primary-color);
-  line-height: 1.65;
-  box-shadow: 
-    inset 0 2px 5px rgba(0, 0, 0, 0.03),
-    0 4px 15px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  font-size: clamp(0.85em, 2.5vw, 0.95em);
-  animation: fadeInText 0.6s ease;
-  word-wrap: break-word;
-  word-break: break-word;
+  width: 100%;
+  max-width: 540px;
+  background: var(--parchment);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.02' numOctaves='4' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23p)' opacity='0.12'/%3E%3C/svg%3E"),
+    linear-gradient(160deg, #fdf3d8 0%, #f0dea8 40%, #e8d090 100%);
+  border-radius: 4px;
+  padding: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 7;
-  -webkit-box-orient: vertical;
-  flex-grow: 1;
-  margin: 15px 0;
-  min-height: 80px;
+  box-shadow:
+    0 0 0 1px var(--parchment-deeper),
+    0 0 0 4px var(--stone),
+    0 0 0 6px var(--gold),
+    0 0 0 10px var(--stone),
+    0 30px 80px rgba(0,0,0,0.8),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  animation: fadeIn 1.2s ease both;
 }
 
-@keyframes fadeInText {
-  from { 
-    opacity: 0.6;
-    transform: translateY(-10px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)  scale(1); }
 }
 
-/* ==================== MONSTER STATS ==================== */
+/* ── Decorative Header Banner ── */
+#game::before {
+  content: '⚔  Dragon Repeller  ⚔';
+  display: block;
+  width: 100%;
+  padding: 14px 20px 12px;
+  background:
+    linear-gradient(180deg, #2a1a00 0%, #1a0f00 60%, #0d0700 100%);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--gold-light);
+  text-align: center;
+  text-shadow:
+    0 0 10px rgba(201,147,26,0.8),
+    0 2px 4px rgba(0,0,0,0.9);
+  border-bottom: 3px solid var(--gold);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* ── Corner ornaments via pseudo ── */
+#game::after {
+  content: '';
+  position: absolute;
+  top: 47px; left: 6px; right: 6px; bottom: 6px;
+  border: 1px solid rgba(201,147,26,0.18);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* ── Stats Bar ── */
+#stats {
+  display: flex;
+  gap: 0;
+  background: linear-gradient(180deg, #2a1f0a 0%, #1a1206 100%);
+  border-bottom: 2px solid var(--gold);
+  padding: 0;
+}
+
+#stats .stat {
+  flex: 1;
+  padding: 9px 10px 8px;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--parchment-dark);
+  text-transform: uppercase;
+  border-right: 1px solid rgba(201,147,26,0.3);
+  position: relative;
+}
+
+#stats .stat:last-child {
+  border-right: none;
+}
+
+#stats .stat strong {
+  display: block;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 16px;
+  color: var(--gold-light);
+  text-shadow: 0 0 8px rgba(201,147,26,0.5);
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+
+/* XP icon */
+#stats .stat:nth-child(1)::before { content: '✦'; }
+/* Health icon */
+#stats .stat:nth-child(2)::before { content: '♥'; color: #e74c3c; }
+/* Gold icon */
+#stats .stat:nth-child(3)::before { content: '◈'; color: var(--gold-light); }
+
+#stats .stat::before {
+  margin-right: 4px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+/* ── Monster Stats ── */
 #monsterStats {
   display: none;
-  background: linear-gradient(135deg, #c70d0d 0%, #a00a0a 100%);
-  border: 3px solid #ff6b6b;
-  padding: 16px;
-  margin: 15px 0;
-  border-radius: 10px;
-  color: var(--text-light);
-  box-shadow: 
-    0 8px 30px rgba(199, 13, 13, 0.5),
-    inset 0 1px 0 rgba(255, 107, 107, 0.3);
-  animation: slideInMonster 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  flex-shrink: 0;
-}
-
-@keyframes slideInMonster {
-  from {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  background: linear-gradient(180deg, #4a0a0a 0%, #2d0505 100%);
+  border-top: 2px solid #8b0000;
+  border-bottom: 2px solid #8b0000;
+  padding: 10px 16px;
+  text-align: center;
 }
 
 #monsterStats .stat {
-  background: rgba(255, 107, 107, 0.2);
-  border: 1px solid #ff8b8b;
-  color: var(--text-light);
-  padding: 8px 12px;
-  margin: 4px 0;
-  border-radius: 6px;
-  font-size: clamp(0.8em, 2vw, 0.9em);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: left;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: inline-block;
+  padding: 0 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #e8c4a0;
+  border-right: 1px solid rgba(200,50,50,0.4);
+}
+
+#monsterStats .stat:last-child {
+  border-right: none;
 }
 
 #monsterStats .stat strong {
-  color: #ffcccc;
-  font-weight: 700;
+  display: block;
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 15px;
+  color: #ff6b6b;
+  text-shadow: 0 0 10px rgba(255,50,50,0.6);
+  margin-top: 2px;
 }
 
-/* ==================== CONTROLS ==================== */
+/* ── Controls ── */
 #controls {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  flex-shrink: 0;
-  margin-top: auto;
-  padding-top: 15px;
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  background: linear-gradient(180deg, #f5e9c8 0%, #ead9a4 100%);
+  border-bottom: 2px solid var(--parchment-deeper);
 }
 
+/* ── Buttons ── */
 button {
-  padding: 14px 12px;
+  flex: 1;
   cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: clamp(0.75em, 2.5vw, 0.9em);
-  transition: all 0.2s ease;
+  font-family: 'Cinzel', serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
-  box-shadow: 
-    0 6px 20px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: var(--ink);
+  padding: 10px 8px;
+  border: none;
+  border-radius: 2px;
   position: relative;
   overflow: hidden;
-  line-height: 1.2;
-  white-space: normal;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--secondary-color);
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
-  z-index: 10;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+
+  /* Layered metallic gold effect */
+  background:
+    linear-gradient(180deg,
+      #ffe490 0%,
+      #f0c030 30%,
+      #c9850a 70%,
+      #a06010 100%
+    );
+  box-shadow:
+    0 1px 0 rgba(255,255,200,0.5) inset,
+    0 -1px 0 rgba(0,0,0,0.3) inset,
+    0 3px 8px rgba(0,0,0,0.4),
+    0 0 0 1px #7a4e00,
+    0 0 0 2px rgba(255,220,80,0.2);
+  text-shadow: 0 1px 1px rgba(255,240,180,0.6);
 }
 
+/* Shield/crest embossed edge */
 button::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-  z-index: 0;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.18) 0%, transparent 50%);
+  pointer-events: none;
 }
 
-button:hover::before {
-  width: 300px;
-  height: 300px;
+button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,255,180,0.3) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
 button:hover {
-  transform: translateY(-4px);
-  box-shadow: 
-    0 10px 30px rgba(254, 172, 50, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 1px 0 rgba(255,255,200,0.5) inset,
+    0 -1px 0 rgba(0,0,0,0.3) inset,
+    0 6px 16px rgba(0,0,0,0.5),
+    0 0 0 1px #c9850a,
+    0 0 12px rgba(240,192,48,0.4);
+}
+
+button:hover::after {
+  opacity: 1;
 }
 
 button:active {
-  transform: translateY(-1px);
+  transform: translateY(1px);
+  filter: brightness(0.95);
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.2) inset,
+    0 2px 4px rgba(0,0,0,0.3),
+    0 0 0 1px #7a4e00;
 }
 
-/* ==================== RESPONSIVE DESIGN ==================== */
-@media (max-width: 768px) {
-  #game {
-    padding: 15px;
-    border-radius: 10px;
-  }
-
-  .header {
-    margin-bottom: 15px;
-    padding-bottom: 12px;
-  }
-
-  .header h1 {
-    font-size: 1.8em;
-  }
-
-  .header-dragon {
-    font-size: 2.5em;
-  }
-
-  #stats {
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-
-  .stat {
-    padding: 10px;
-  }
-
-  .stat strong {
-    font-size: 1.05em;
-  }
-
-  #text {
-    padding: 12px;
-    font-size: 0.9em;
-    margin: 12px 0;
-    -webkit-line-clamp: 6;
-    min-height: 70px;
-  }
-
-  #monsterStats {
-    padding: 12px;
-    margin: 12px 0;
-  }
-
-  #monsterStats .stat {
-    padding: 6px 10px;
-    font-size: 0.85em;
-  }
-
-  #controls {
-    gap: 10px;
-    padding-top: 12px;
-  }
-
-  button {
-    padding: 12px 8px;
-    font-size: 0.85em;
-    min-height: 40px;
-  }
+button:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
 }
 
-@media (max-width: 600px) {
-  #game {
-    padding: 12px;
-    border-radius: 8px;
-  }
+/* ── Text / Narrative Area ── */
+#text {
+  min-height: 130px;
+  padding: 20px 22px 22px;
+  background:
+    linear-gradient(180deg, #1a1005 0%, #120c04 100%);
+  color: var(--parchment);
+  font-family: 'IM Fell English', Georgia, serif;
+  font-size: 15.5px;
+  line-height: 1.75;
+  letter-spacing: 0.2px;
+  border-top: 2px solid var(--stone);
+  position: relative;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
 
-  .header {
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-  }
+/* Decorative paragraph mark */
+#text::before {
+  content: '❧';
+  display: block;
+  font-size: 22px;
+  color: var(--gold);
+  opacity: 0.5;
+  margin-bottom: 8px;
+  text-align: center;
+  line-height: 1;
+}
 
-  .header h1 {
-    font-size: 1.5em;
-  }
+/* Scroll bottom flourish */
+#text::after {
+  content: '— ✦ —';
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--gold);
+  opacity: 0.35;
+  letter-spacing: 6px;
+}
 
-  .header-dragon {
-    font-size: 2em;
-    margin: 3px 0;
-  }
-
-  .header p {
-    font-size: 0.8em;
-  }
-
-  #stats {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .stat {
-    padding: 8px;
-    border-width: 1px;
-    font-size: 0.85em;
-  }
-
-  .stat strong {
-    font-size: 0.95em;
-  }
-
-  #text {
-    padding: 10px;
-    font-size: 0.85em;
-    margin: 10px 0;
-    -webkit-line-clamp: 5;
-    min-height: 60px;
-  }
-
-  #monsterStats {
-    padding: 10px;
-    margin: 10px 0;
-  }
-
-  #monsterStats .stat {
-    padding: 5px 8px;
-    font-size: 0.8em;
-    margin: 3px 0;
-  }
-
+/* ── Responsive ── */
+@media (max-width: 420px) {
   #controls {
-    gap: 8px;
-    padding-top: 10px;
+    flex-direction: column;
   }
-
   button {
+    font-size: 10px;
     padding: 10px 6px;
-    font-size: 0.8em;
-    min-height: 38px;
   }
-}
-
-@media (max-width: 480px) {
-  #game {
-    padding: 10px;
-    border-radius: 6px;
-  }
-
-  .header {
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-  }
-
-  .header h1 {
-    font-size: 1.3em;
-  }
-
-  .header-dragon {
-    font-size: 1.8em;
-    margin: 2px 0;
-  }
-
-  #stats {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-
-  .stat {
-    padding: 6px;
-    border-width: 1px;
-    font-size: 0.8em;
-  }
-
-  .stat strong {
-    font-size: 0.9em;
-  }
-
-  #text {
-    padding: 8px;
-    font-size: 0.8em;
-    margin: 8px 0;
-    -webkit-line-clamp: 4;
-    min-height: 50px;
-  }
-
-  #monsterStats {
-    padding: 8px;
-    margin: 8px 0;
-  }
-
-  #monsterStats .stat {
-    padding: 4px 6px;
-    font-size: 0.75em;
-    margin: 2px 0;
-  }
-
-  #controls {
-    gap: 6px;
-    padding-top: 8px;
-  }
-
-  button {
-    padding: 8px 4px;
-    font-size: 0.75em;
-    min-height: 36px;
-  }
-}
-
-@media (max-height: 700px) {
-  #game {
-    padding: 8px;
-  }
-
-  .header {
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-  }
-
-  .header h1 {
-    font-size: 1.5em;
-  }
-
-  .header-dragon {
-    font-size: 2em;
-    margin: 2px 0;
-  }
-
-  #stats {
-    gap: 5px;
-    margin-bottom: 8px;
-  }
-
-  .stat {
-    padding: 5px;
-    font-size: 0.75em;
-  }
-
-  .stat strong {
-    font-size: 0.85em;
-  }
-
-  #text {
-    padding: 8px;
-    font-size: 0.8em;
-    margin: 6px 0;
-    -webkit-line-clamp: 3;
-    min-height: 40px;
-  }
-
-  #monsterStats {
-    padding: 6px;
-    margin: 6px 0;
-  }
-
-  #monsterStats .stat {
-    padding: 3px;
-    font-size: 0.7em;
-  }
-
-  #controls {
-    gap: 5px;
-    padding-top: 6px;
-  }
-
-  button {
-    padding: 6px 3px;
-    font-size: 0.7em;
-    min-height: 32px;
+  #game::before {
+    font-size: 12px;
+    letter-spacing: 2px;
   }
 }
